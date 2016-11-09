@@ -158,7 +158,7 @@ Using ``extra_parameters``
 Some resources (ex. those using ApiKey auth) will need extra parameters for all
 the endpoints. You can specify those by setting an ``extra_parameters``
 attribute on the ``Meta`` class. The value should be a dict following the
-structure of the field dictionary for `using extra actions`_.
+structure of the field dictionary for `Using extra_actions`_.
 
 .. important::
    ``extra_parameters`` feeds directly into the schema **for swagger**. It does
