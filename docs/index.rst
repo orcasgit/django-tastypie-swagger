@@ -164,8 +164,6 @@ structure of the field dictionary for `using extra actions`_.
    ``extra_parameters`` feeds directly into the schema **for swagger**. It does
    not alter the Tastypie schema listing Tastypie provides.
 
-__ `Using ``extra_actions```_
-
 
 Detecting required fields
 -------------------------
