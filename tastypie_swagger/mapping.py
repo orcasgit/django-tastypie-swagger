@@ -270,6 +270,19 @@ class ResourceSwaggerMapping(object):
 
         return parameters
 
+    def build_parameters_from_extra(self, extra_parameters):
+        """Given a dict of parameters, build a list usable by Swagger UI"""
+        parameters = []
+        for name, field in extra_parameters.items():
+            parameters.append(self.build_parameter(
+                paramType=field.get("param_type", "query"),
+                name=name,
+                dataType=field.get("type", "string"),
+                required=field.get("required", True),
+                description=force_text(field.get("description", "")),
+            ))
+        return parameters
+
     def build_parameter_for_object(self, method='get'):
         return self.build_parameter(
             name=self.resource_name,
@@ -283,6 +296,14 @@ class ResourceSwaggerMapping(object):
         detail_uri_name = getattr(self.resource._meta, "detail_uri_name", "pk")
         return detail_uri_name == "pk" and "id" or detail_uri_name
 
+    def build_extra_parameters(self):
+        """
+        Build any parameters specified in the ``extra_parameters`` dict of the
+        resource Meta
+        """
+        extra_parameters = getattr(self.resource._meta, 'extra_parameters', {})
+        return self.build_parameters_from_extra(extra_parameters)
+
     def build_parameters_from_extra_action(self, method, fields, resource_type):
         parameters = []
         if resource_type == "view":
@@ -290,14 +311,7 @@ class ResourceSwaggerMapping(object):
                               name=self._detail_uri_name(),
                               dataType=self.resource_pk_type,
                               description='Primary key of resource'))
-        for name, field in fields.items():
-            parameters.append(self.build_parameter(
-                paramType=field.get("param_type", "query"),
-                name=name,
-                dataType=field.get("type", "string"),
-                required=field.get("required", True),
-                description=force_text(field.get("description", "")),
-            ))
+        parameters += self.build_parameters_from_extra(fields)
 
         # For non-standard API functionality, allow the User to declaritively
         # define their own filters, along with Swagger endpoint values.
@@ -320,7 +334,7 @@ class ResourceSwaggerMapping(object):
         operation = {
             'summary': self.get_operation_summary(detail=True, method=method),
             'httpMethod': method.upper(),
-            'parameters': [
+            'parameters': self.build_extra_parameters() + [
                 self.build_parameter(
                     paramType='path',
                     name=self._detail_uri_name(),
@@ -338,7 +352,10 @@ class ResourceSwaggerMapping(object):
         return {
             'summary': self.get_operation_summary(detail=False, method=method),
             'httpMethod': method.upper(),
-            'parameters': self.build_parameters_for_list(method=method),
+            'parameters': (
+                self.build_extra_parameters() +
+                self.build_parameters_for_list(method=method)
+            ),
             'responseClass': 'ListView' if method.upper() == 'GET' else self.resource_name,
             'nickname': '%s_list' % self.resource_name,
             'notes': self.resource.__doc__,

@@ -38,7 +38,7 @@ Enable documentation for an api endpoint by adding a URL to your urlpatterns.
 
 eg::
 
-  
+
     urlpatterns = patterns('',
         ...
 
@@ -152,6 +152,19 @@ Available keys and meaning for the ``fields`` dictionary:
   parameter.
 
 
+Using ``extra_parameters``
+--------------------------
+
+Some resources (ex. those using ApiKey auth) will need extra parameters for all
+the endpoints. You can specify those by setting an ``extra_parameters``
+attribute on the ``Meta`` class. The value should be a dict following the
+structure of the field dictionary for `Using extra_actions`_.
+
+.. important::
+   ``extra_parameters`` feeds directly into the schema **for swagger**. It does
+   not alter the Tastypie schema listing Tastypie provides.
+
+
 Detecting required fields
 -------------------------
 
@@ -177,7 +190,7 @@ It is possible to define a *plural* name for a resource, using this attribute in
 License
 =======
 
-Copyright © Concentric Sky, Inc. 
+Copyright © Concentric Sky, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
