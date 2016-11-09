@@ -406,7 +406,7 @@ class ResourceSwaggerMapping(object):
                     'operations': []
                 }
 
-                if extra_action.get("resource_type", "view") == "list":
+                if extra_action.get("resource_type", "view") != "view":
                     extra_api['path'] = "%s%s/" % (self.get_resource_base_uri(), extra_action.get('name'))
 
                 operation = self.build_extra_operation(extra_action)
