@@ -107,16 +107,10 @@ class ResourceSwaggerMapping(object):
 
         We also use this to build the detail url, which may not be correct
         """
-        url_name = 'api_dispatch_list'
-        if self.resource._meta.urlconf_namespace:
-            url_name = '{}:{}'.format(
-                self.resource._meta.urlconf_namespace,
-                url_name
-            )
         if hasattr(self.resource, 'get_resource_list_uri'):
-            return self.resource.get_resource_list_uri(url_name=url_name)
+            return self.resource.get_resource_list_uri()
         elif hasattr(self.resource, 'get_resource_uri'):
-            return self.resource.get_resource_uri(url_name=url_name)
+            return self.resource.get_resource_uri()
         else:
             raise AttributeError('Resource %(resource)s has neither get_resource_list_uri nor get_resource_uri' % {'resource': self.resource})
 
