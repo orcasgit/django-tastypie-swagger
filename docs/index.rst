@@ -39,7 +39,7 @@ Enable documentation for an api endpoint by adding a URL to your urlpatterns.
 eg::
 
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         ...
 
         url(r'api/myapi/doc/',
@@ -51,7 +51,7 @@ eg::
         ),
 
         ...
-    )
+    ]
 
 - The ``namespace`` is repeated on purpose to go around some limitations and should be unique amongst the other
 urls you have defined.

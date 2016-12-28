@@ -55,8 +55,8 @@ Enable documentation for an api endpoint by adding a URL to your urlpatterns.
 
 eg::
 
-  
-    urlpatterns = patterns('',
+
+    urlpatterns = [
         ...
 
         url(r'api/myapi/doc/',
@@ -65,7 +65,7 @@ eg::
         ),
 
         ...
-    )
+    ]
 
 
 To declare more than one endpoint, repeat the above URL definition and change the namespace.
